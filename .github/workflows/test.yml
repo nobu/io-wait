@@ -55,6 +55,10 @@ jobs:
       matrix:
         ruby: [ '2.5' ]
         os: [ ubuntu, macos, windows ]
+        include:
+          - ruby: 'jruby-9.2'
+            os: 'ubuntu'
+            platform: 'java'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
@@ -63,7 +67,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
     - uses: actions/download-artifact@master
       with:
-        name: ${{needs.test.outputs.gem}}-macos
+        name: ${{needs.test.outputs.gem}}-${{matrix.platform || 'macos'}}
         path: pkg
     - name: Install gem
-      run: gem install pkg/${{needs.test.outputs.gem}}*.gem
+      run: gem install pkg/${{needs.test.outputs.gem}}-*${{matrix.platform || ''}}.gem
