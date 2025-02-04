@@ -1,10 +1,9 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 require 'mkmf'
 
 if RUBY_VERSION < "2.6"
   File.write("Makefile", dummy_makefile($srcdir).join(""))
 else
-  target = "io/wait"
   have_func("rb_io_wait")
   have_func("rb_io_descriptor")
   unless macro_defined?("DOSISH", "#include <ruby.h>")
@@ -14,12 +13,13 @@ else
     end
     if fionread
       $defs << "-DFIONREAD_HEADER=\"<#{fionread}>\""
-      create_makefile(target)
+      ok = true
     end
   else
     if have_func("rb_w32_ioctlsocket", "ruby.h")
       have_func("rb_w32_is_socket", "ruby.h")
-      create_makefile(target)
+      ok = true
     end
   end
+  create_makefile("io/wait") if ok
 end

@@ -23,11 +23,8 @@ when RUBY_VERSION < "2.6"
 
   libs = []
 else
-  require 'rake/extensiontask'
-  extask = Rake::ExtensionTask.new(name) do |x|
-    x.lib_dir.sub!(%r[(?=/|\z)], "/#{RUBY_VERSION}/#{x.platform}")
-  end
-  libs = ["lib/#{RUBY_VERSION}/#{extask.platform}"]
+  require "ruby-core/extensiontask"
+  libs = RubyCore::ExtensionTask.new(Bundler::GemHelper.instance.gemspec).libs
 end
 
 Rake::TestTask.new(:test) do |t|
