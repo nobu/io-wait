@@ -41,7 +41,7 @@ jobs:
       continue-on-error: ${{ matrix.continue-on-error }}
     - id: build
       run: |
-        rake build:sha512
+        bundle exec rake build:sha512
         cat pkg/SHA512
         gem=${GITHUB_REPOSITORY#*/}
         echo "pkg=$gem-${RUNNING_OS%-*}" >> $GITHUB_OUTPUT
