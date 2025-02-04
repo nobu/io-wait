@@ -36,7 +36,7 @@ jobs:
       run: bundle exec rake
     - id: build
       run: |
-        rake build:sha512
+        bundle exec rake build:sha512
         cat pkg/SHA512
         gem=${GITHUB_REPOSITORY#*/}
         echo "gem=$gem" >> $GITHUB_OUTPUT
